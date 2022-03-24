@@ -4,6 +4,7 @@ M = 1j
 optim = False
 
 
+# Блок инициализации задачи, выбор базисов и добавление искусственных переменных
 def ini(m, n, matrix, Z, alg):
     baz = 3
     if alg:
@@ -11,7 +12,6 @@ def ini(m, n, matrix, Z, alg):
     else:
         Cb = [M] * m
     basis = [-1] * m
-
     for i in range(0, n):
         flag = True
         count = 0
@@ -46,6 +46,7 @@ def ini(m, n, matrix, Z, alg):
     return basis, Cb, Z
 
 
+# Составление новой таблицы с добавленными искусственными базисами
 def fir(m, n, l, matrix, basis):
     table = ny(m, l)
     for i in range(0, m):
@@ -57,7 +58,8 @@ def fir(m, n, l, matrix, basis):
     return table
 
 
-# Расчет дельта строк fj-cj
+# Расчет дельта строк fj-cj, вместо числа М используется комплексная единица, проверяется оптимальность плана
+# Оптимальность проверяется на все отрицательные|положительные значения в строке дельта
 def sec(m, n, Z, Cb, basis, table, flag):
     delt = []
     delt_M = []
@@ -159,6 +161,7 @@ def fou(m, l, mainRow, mainCol, table, A, Cb, Z, basis):
     return new_table, newA, Cb, basis
 
 
+# Заполнение плана
 def fif(m, basis, A, l):
     result = []
     for j in range(l):
@@ -168,6 +171,7 @@ def fif(m, basis, A, l):
     return result
 
 
+# Проверка на неограниченность
 def StopCriterion(m, table, main):
     count = 0
     for i in range(m):
@@ -179,6 +183,7 @@ def StopCriterion(m, table, main):
     return True
 
 
+# Расчет значения целевой функции
 def F(m, Cb, A):
     z = 0
     for i in range(m):
@@ -186,6 +191,7 @@ def F(m, Cb, A):
     return z
 
 
+# Создание заполненной нулями таблицы
 def ny(m, n):
     new_table = [0] * m
     for i in range(m):
@@ -193,6 +199,7 @@ def ny(m, n):
     return new_table
 
 
+# Последовательная работа алгоритма вычисления
 def pack(source, A, Z, isMax):
     m = len(source)
     n = len(source[0])
